@@ -7,11 +7,11 @@ set_time_limit(0);
 
 class AsseturCrawler extends AbstractCrawler
 {
-	const FIND_PAGES = 1;
+	const BUSNAME = 1;
 
-	const ACCESS_ITEM = 2;
+	const ITINERARY = 2;
 
-	const COLLECT_INFO = 3;
+	const TIME = 3;
 
 	private $_cities = array (); 
 
@@ -21,7 +21,7 @@ class AsseturCrawler extends AbstractCrawler
 
 	private $_base = 'http://localhost/busaoapp/web/data/';
 
-	private $_status = self::FIND_PAGES;
+	private $_status = self::BUSNAME;
 
 	private $_retry = FALSE;
 
@@ -145,8 +145,7 @@ class AsseturCrawler extends AbstractCrawler
 		else 
 			$lb = "<br />";
 
-
-		for($i = 311; $i < 315; $i++)
+		for($i = 300; $i < 316; $i++)
 		{
 			$this->setURL($this->_base . str_pad($i, 3, "0", STR_PAD_LEFT).'.html');
 			// Thats enough, now here we go
@@ -191,24 +190,83 @@ class AsseturCrawler extends AbstractCrawler
 			$lb = "<br />";
 
 		$dom = str_get_html($html);
-		
+		$line = 'A';
+		$sentido = 1;
+		$this->_status = self::BUSNAME;
 
 		if($dom->find('td.tittab_maior',0))
 		{
-			//echo $dom->find('td.tittab_maior',0)->plaintext.$lb;
+			echo $dom->find('td.tittab_maior',0)->plaintext.$lb;
+		}
+		else if($dom->find('td.fontlinha',0))
+		{
+			echo $dom->find('td.fontlinha',0)->plaintext.$lb;
 		}
 		
 		foreach ($dom->find('table') as $key => $table) 
 		{
-			# code...
-			if($table->find('tr td.tittab', 0))
+			
+			if( $table->find('.tittab_maior') && preg_match('/Sentido:/', $table->plaintext) )
 			{
-				//echo $table;
+				echo "##### Starting itinerary...#####".$lb;
+				$this->_status = self::ITINERARY;
+			}
+			else if( $table->find('tr td table tr td.fontstatususuazul') && preg_match('/Sentido:/', $table->plaintext) )
+			{
+				echo "##### Starting itinerary...#####".$lb;
+				$this->_status = self::ITINERARY;
 			}
 
-			if($table->find('table tr td.tittab_maior', 0))
+			//capturando o itinerário 
+			// cada td da tabela de itinerário possui o nome de uma rua
+			if( !$table->find('tr td.tittab_maior') && !$table->find('table tr td.fontstatususuazul') && preg_match('/Sentido:/', $table->plaintext) )
 			{
-				echo $table;
+				
+				if($sentido++ % 2)
+					echo "Linha: ". ($line++).$lb;
+
+				foreach ($table->find('td') as $key => $value) {
+					if($key)
+					{
+						$street = explode('-', $value->plaintext);
+						echo trim($street[1]).$lb;
+					}
+					else
+					{
+						echo $value->plaintext.$lb;
+					}
+				}
+				
+			}
+
+			if($this->_status == self::TIME && !preg_match('/Plano Funcional:/', $table->plaintext))
+			{
+				require_once 'htmlpurifier/library/HTMLPurifier.auto.php';
+
+				$config = HTMLPurifier_Config::createDefault();
+				$purifier = new HTMLPurifier($config);
+				$config->set('Core.Encoding', 'ISO-8859-1');
+
+				$table2 =  str_get_html($purifier->purify($table));
+
+				foreach ($table2->find('tr') as $keyTr => $trs) 
+				{
+					foreach ($trs->find('td') as $keyTd => $tds) 
+					{
+						echo '['. trim($tds) .']';
+					}
+
+					echo $lb;
+				}
+			}
+
+			if(preg_match('/Plano Funcional:/', $table->plaintext) )
+			{
+				$this->_status = self::TIME;
+
+				echo "##### Finishing itinerary...#####".$lb.$lb;
+				echo $table->find ('.fontstatususuazul', 0)->plaintext.$lb;
+				echo "##### Starting time crawler...#####".$lb;
 			}
 		}
 		return 0;
