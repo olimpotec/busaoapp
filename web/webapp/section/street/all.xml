@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form table="cms.streets" primary="street_id">
+	<go-to flag="success" action="[default]" />
+	<go-to flag="fail" action="[same]" />
+	<field type="String" column="street_name" label="Name | pt_BR: Nome | es_ES: Nombre" max-length="128" required="true" />
+</form>

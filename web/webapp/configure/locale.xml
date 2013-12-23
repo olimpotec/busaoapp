@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locale-mapping>
+	<language name="en_US">
+		<number
+			decimal-symbol="."
+			decimal-digits="2"
+			group-symbol=","
+		/>
+		<currency
+			currency-symbol="US$"
+			decimal-symbol="."
+			decimal-digits="2"
+			group-symbol=","
+		/>
+		<time
+			short-format="%H:%M"
+			long-format="%X"
+		/>
+		<date
+			short-format="%x"
+			long-format="%A, %B %d, %Y"
+		/>
+	</language>
+	
+	<language name="pt_BR">
+		<number
+			decimal-symbol=","
+			decimal-digits="2"
+			group-symbol="."
+		/>
+		<currency
+			currency-symbol="R$"
+			decimal-symbol=","
+			decimal-digits="2"
+			group-symbol="."
+		/>
+		<time
+			short-format="%H:%M"
+			long-format="%X"
+		/>
+		<date
+			short-format="%x"
+			long-format="%A, %d de %B de %Y"
+		/>
+	</language>
+	
+	<language name="es_ES">
+		<number
+			decimal-symbol=","
+			decimal-digits="2"
+			group-symbol="."
+		/>
+		<currency
+			currency-symbol="R$"
+			decimal-symbol=","
+			decimal-digits="2"
+			group-symbol="."
+		/>
+		<time
+			short-format="%H:%M"
+			long-format="%X"
+		/>
+		<date
+			short-format="%x"
+			long-format="%A, %d de %B de %Y"
+		/>
+	</language>
+</locale-mapping>

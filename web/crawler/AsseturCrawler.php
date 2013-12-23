@@ -31,6 +31,8 @@ class AsseturCrawler extends AbstractCrawler
 
 	private $_404 = false;
 
+	private $db;
+
 	private $_fields = array(	'name' 			=> '',
 								'address' 		=> '',
 								'city' 			=> NULL,
@@ -56,15 +58,19 @@ class AsseturCrawler extends AbstractCrawler
 
 	public function __construct ()
 	{
+		$this->db = new PDO ('pgsql:host=localhost port=5432 dbname=busaoapp user=mais password=123', 'mais', '123');
+	
+		$this->db->setAttribute (PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
+		$this->db->exec ('SET datestyle TO ISO, DMY');
+		
+		$this->db->exec ('SET search_path = cms,titan');
 
 		parent::__construct ();
 	}
 	protected function _run()
 	{
-		$this->_setupCategories ();
-		$this->_setupCities ();
-
+		
 		// Only receive content of files with content-type "text/html"
 		$this->addContentTypeReceiveRule("#text/html#");
 
@@ -105,7 +111,7 @@ class AsseturCrawler extends AbstractCrawler
 		//	echo "Content not received".$lb; 
 
 		
-		$fp = fopen(dirname(__FILE__).'/log.txt', 'w');
+		$fp = fopen(dirname(__FILE__).'/log.txt', 'w+');
 
 		fwrite($fp, "Page requested: ".$DocInfo->url." (".$DocInfo->http_status_code.")".time()."\n");
 
@@ -145,12 +151,12 @@ class AsseturCrawler extends AbstractCrawler
 		else 
 			$lb = "<br />";
 
-		for($i = 300; $i < 316; $i++)
+		for($i = 1; $i < 1000; $i++)
 		{
 			$this->setURL($this->_base . str_pad($i, 3, "0", STR_PAD_LEFT).'.html');
 			// Thats enough, now here we go
 			$this->go();
-
+			echo $this->_base . str_pad($i, 3, "0", STR_PAD_LEFT).'.html'.$lb;
 			// At the end, after the process is finished, we print a short
 			// report (see method getProcessReport() for more information)
 			$report = $this->getProcessReport();
@@ -192,51 +198,108 @@ class AsseturCrawler extends AbstractCrawler
 		$dom = str_get_html($html);
 		$line = 'A';
 		$sentido = 1;
+		$company = '';
+		$color = 'N/A';
+		$functionalPlanId = 0;
 		$this->_status = self::BUSNAME;
+		$route = array ('route_way' => '', 'street_id' => 0, 'order' => 1, 'street_name' => '', 'line_id' => 'A', 'bus_id' => 0);
+
+		preg_match_all('/data\/(.*)\.html/', $url, $matches);
+
+		$busNumber = intval($matches[1][0]);
 
 		if($dom->find('td.tittab_maior',0))
 		{
 			echo $dom->find('td.tittab_maior',0)->plaintext.$lb;
+
+			if(preg_match('/azul/', $dom->find('td.tittab_maior',0)->firstChild()->getAttribute('src')))
+				$color = 'AZUL' ;
+			else if(preg_match('/vermelho/', $dom->find('td.tittab_maior',0)->firstChild()->getAttribute('src')))
+				$color ='VERMELHO';
+			else if(preg_match('/amarelo/', $dom->find('td.tittab_maior',0)->firstChild()->getAttribute('src')))
+				$color = 'AMARELO';
+			else if(preg_match('/micro/', $dom->find('td.tittab_maior',0)->firstChild()->getAttribute('src')))
+				$color = 'MICRO';
+
+			preg_match_all('/EMPRESA:(.*)/', $dom->find('td.tittab_maior',0)->plaintext, $matches);
+
+			$company = trim(str_replace('-', '', $matches [1][0]));
+
+			preg_match_all('/LINHA:(.*)LINHA/', $dom->find('td.tittab_maior',0)->plaintext, $matches);
+
+			$busName = trim(str_replace('-', '', $matches [1][0]));
+			
+			
+			
+
 		}
 		else if($dom->find('td.fontlinha',0))
 		{
-			echo $dom->find('td.fontlinha',0)->plaintext.$lb;
+			$busName = $dom->find('td.fontlinha',0)->plaintext.$lb;
 		}
+
+
+		if(empty($busName)) return;
 		
+		echo $busName.$lb;
+
+		$sth = $this->db->prepare ("SELECT bus_id FROM cms.bus WHERE _no_accents(bus_name) ilike _no_accents('%".pg_escape_string(utf8_encode($busName))."%') AND bus_number = ".$busNumber);
+		$sth->execute ();
+		$obj = $sth->fetchObject();
+		
+		if(!$obj)
+		{
+			$this->db->exec ("INSERT INTO cms.bus  (bus_name, bus_number, color, company) VALUES ('".pg_escape_string(utf8_encode($busName))."', '".$busNumber."', '".$color."', '".utf8_encode($company)."')");
+			$sth = $this->db->prepare ("SELECT max(bus_id) as last_id FROM cms.bus");
+			$sth->execute ();
+			$obj = $sth->fetchObject ();
+			$route['bus_id'] = $obj->last_id;
+		}
+		else
+		{
+			$route['bus_id'] = $obj->bus_id;
+		}
+
 		foreach ($dom->find('table') as $key => $table) 
 		{
 			
+			
+
 			if( $table->find('.tittab_maior') && preg_match('/Sentido:/', $table->plaintext) )
-			{
-				echo "##### Starting itinerary...#####".$lb;
 				$this->_status = self::ITINERARY;
-			}
 			else if( $table->find('tr td table tr td.fontstatususuazul') && preg_match('/Sentido:/', $table->plaintext) )
-			{
-				echo "##### Starting itinerary...#####".$lb;
 				$this->_status = self::ITINERARY;
-			}
+			
 
 			//capturando o itinerário 
 			// cada td da tabela de itinerário possui o nome de uma rua
 			if( !$table->find('tr td.tittab_maior') && !$table->find('table tr td.fontstatususuazul') && preg_match('/Sentido:/', $table->plaintext) )
 			{
 				
-				if($sentido++ % 2)
-					echo "Linha: ". ($line++).$lb;
 
-				foreach ($table->find('td') as $key => $value) {
+				$route ['line_id'] = $line;
+
+				$this->db->exec ("DELETE FROM cms.routes WHERE  bus_id = ".$route['bus_id']." AND line ilike '".$route['line_id']."'");
+
+					
+				if($sentido++ % 2)
+					$line++;
+
+				foreach ($table->find('td') as $key => $value) 
+				{
 					if($key)
 					{
 						$street = explode('-', $value->plaintext);
-						echo trim($street[1]).$lb;
+						$route['street_name'] =  $street[1];
+						$route['street_id'] = $this->insertOrUpdateStreets ($route['street_name']);
+						$route['order'] = intval($street[0]);
+						
+						$this->insertOrUpdateRoutes ($route);
 					}
 					else
-					{
-						echo $value->plaintext.$lb;
-					}
+						$route['route_way']  = strip_tags($value->plaintext);
+
 				}
-				
 			}
 
 			if($this->_status == self::TIME && !preg_match('/Plano Funcional:/', $table->plaintext))
@@ -248,28 +311,79 @@ class AsseturCrawler extends AbstractCrawler
 				$config->set('Core.Encoding', 'ISO-8859-1');
 
 				$table2 =  str_get_html($purifier->purify($table));
+				
+				if(!$table2)
+					return ;
+
+				$itinerary = array ( 'bus_id' 	=> $route['bus_id'],
+									  'line'	=> $line,
+									  'marker_id' => 0,
+									  'schedule'	=> 0,
+									  'functional_plan_id' => $functionalPlanId
+								);
+
+				$markers = array();
 
 				foreach ($table2->find('tr') as $keyTr => $trs) 
 				{
-					foreach ($trs->find('td') as $keyTd => $tds) 
+					
+					if(!$keyTr)
 					{
-						echo '['. trim($tds) .']';
+						$markers = $this->insertMarkers ($trs->find('td'));
+						continue;
 					}
+						
 
-					echo $lb;
+					$this->db->exec("DELETE FROM cms.itineraries WHERE bus_id = ".$itinerary['bus_id']." AND functional_plan_id = ". $functionalPlanId);
+
+					$arrayTds = $trs->find('td');
+
+					$itinerary['line'] = trim(strip_tags($arrayTds [count($arrayTds) - 1]));
+
+					foreach ($arrayTds as $keyTd => $tds) 
+					{
+
+						if(!isset($markers[$keyTd])) continue;
+
+						$itinerary ['marker_id'] = $markers[$keyTd]['idbd'];
+						$content = trim(strip_tags($tds));
+						
+						if(empty($content)) continue;
+
+						if(count($trs->find('td')) == $keyTd + 1) continue;
+
+						$itinerary['schedule'] = substr(str_replace(':', '', $content), 0, 2). ":".substr(str_replace(':', '', $content), 2, 2);
+
+						$this->insertItinerary ($itinerary);
+						
+					}
 				}
+
+				unset($functionalPlanId);
 			}
 
 			if(preg_match('/Plano Funcional:/', $table->plaintext) )
 			{
 				$this->_status = self::TIME;
+				
+				$sth = $this->db->prepare ("SELECT functional_plan_id FROM cms.functional_plan WHERE _no_accents(functional_plan_name) ilike _no_accents('%".trim(utf8_encode(strip_tags($table->find ('.fontstatususuazul', 0)->plaintext)))."%')");
+				$sth->execute ();
+				$obj = $sth->fetchObject();
+				if(!$obj)
+				{
+					$this->db->exec ("INSERT INTO cms.functional_plan  (functional_plan_name) VALUES ('". trim(utf8_encode(strip_tags($table->find ('.fontstatususuazul', 0)->plaintext))). "')");
+					
+					$sth = $this->db->prepare ("SELECT max(functional_plan_id) as last_id FROM cms.functional_plan");
+					$sth->execute ();
+					$obj = $sth->fetchObject ();
 
-				echo "##### Finishing itinerary...#####".$lb.$lb;
-				echo $table->find ('.fontstatususuazul', 0)->plaintext.$lb;
-				echo "##### Starting time crawler...#####".$lb;
+					$functionalPlanId = $obj->last_id;
+				}
+				else
+					$functionalPlanId = $obj->functional_plan_id;
 			}
 		}
-		return 0;
+		
 	
 		try
 		{
@@ -286,9 +400,83 @@ class AsseturCrawler extends AbstractCrawler
 	{
 		$this->_categories [] = '';
 	}
-	private function _setupCities ()
+	private function insertOrUpdateStreets ($streetName)
 	{
-		$this->_cities ['sp'] = 'sao-paulo';
+			$sth = $this->db->prepare ("SELECT street_id FROM cms.streets WHERE _no_accents(street_name) ilike _no_accents('%".pg_escape_string(utf8_encode($streetName))."%')");
+			$sth->execute ();
+			$obj = $sth->fetchObject();
+
+			if(!$obj)
+			{
+
+				$this->db->exec ("INSERT INTO cms.streets  (street_name) VALUES ('".pg_escape_string(utf8_encode($streetName))."')");
+				$sth = $this->db->prepare ("SELECT max(street_id) as last_id FROM cms.streets");
+				$sth->execute ();
+				$obj = $sth->fetchObject ();
+				
+				return $obj->last_id; 
+			}
+
+			return $obj->street_id;
+	}
+
+	private function insertOrUpdateRoutes ($route)
+	{
+		$sth = $this->db->prepare ("SELECT count(*) as total FROM cms.routes WHERE bus_id = ".$route['bus_id']." 
+																			   AND street_id  = ".$route['street_id']. "
+																			   AND _no_accents(route_way) ilike _no_accents ('".$route['route_way']."') 
+																			   AND line ilike '".$route['line_id']."'");
+		
+		
+		$sth->execute ();
+		$obj = $sth->fetchObject();
+
+		if(!$obj->total)
+		{
+			$this->db->exec ("INSERT INTO cms.routes  (bus_id, street_id, line, _order, route_way) 
+							 VALUES (".$route['bus_id'].", ".$route['street_id'].", '".$route['line_id']."',".$route['order']." ,'".$route['route_way']."')"); 
+		}
+	}
+
+	private function insertMarkers ($markers)
+	{
+		$markersInfo = array ('idbd' => 0, 'label' => '');
+		$markersDB = array ();
+		foreach ($markers as $key => $value) 
+		{
+			$value = trim(strip_tags(utf8_encode($value)));
+			$markersInfo['label'] = $value;
+			$sth = $this->db->prepare ("SELECT marker_id FROM cms.markers WHERE _no_accents(marker_name) ilike _no_accents('%". $value. "%')");
+			$sth->execute ();
+			
+			
+			$obj = $sth->fetchObject();
+
+			if($obj)
+				$markersInfo ['idbd'] = $obj->marker_id;
+			else
+			{
+				$this->db->exec ("INSERT INTO cms.markers  (marker_name) VALUES ('".$value."')"); 
+				
+				$sth = $this->db->prepare ("SELECT max(marker_id) as last_id FROM cms.markers");
+				$sth->execute ();
+				$obj = $sth->fetchObject ();
+				
+				$markersInfo ['idbd'] = $obj->last_id; 
+
+
+
+			}
+
+			$markersDB[$key] = $markersInfo;
+		}
+
+		return $markersDB;
+	}
+
+	private function insertItinerary ($itinerary)
+	{
+		$this->db->exec ("INSERT INTO cms.itineraries (bus_id, line, marker_id, schedule, functional_plan_id) VALUES (".$itinerary['bus_id'].", '".$itinerary['line']."', ".$itinerary['marker_id'].", '".$itinerary['schedule']."', ".$itinerary['functional_plan_id'].")");
 	}
 
 	private function generateUrl($input)

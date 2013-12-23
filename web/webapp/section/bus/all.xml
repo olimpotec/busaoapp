@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form table="cms.bus" primary="bus_id">
+	<go-to flag="success" action="[default]" />
+	<go-to flag="fail" action="[same]" />
+	<field type="String" column="bus_name" label="Name | pt_BR: Nome | es_ES: Nombre" max-length="128" required="true" />
+	<field type="Integer" column="bus_number" label="Number | pt_BR: Número | es_ES: Número" length="2" required="true" />
+	<field type="Enum" column="color" label="Cor">
+		<item value="AZUL" label="Azul" />
+		<item value="VERMELHO" label="Vermelho" />
+		<item value="AMARELO" label="Amarelo" />
+		<item value="" label="Não Informado" />
+	</field>
+	<field type="String" column="company" label="Company | pt_BR: Empresa" max-length="256" />
+</form>
