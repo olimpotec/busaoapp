@@ -1,38 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-   	android:layout_width="match_parent"
-    android:layout_height="48dp" android:paddingTop="15dp">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_bus_selector"
+    android:orientation="horizontal"
+    android:padding="5dip" >
  
-    <!--  ListRow Left side Thumbnail image -->
-
-  
-    <com.olimpotec.busaoapp.custom.CustomTextView
-        android:id="@+id/legendName"
+    <!--  ListRow Left sied Thumbnail image -->
+    <LinearLayout android:id="@+id/thumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        
+        android:layout_marginRight="5dip">
+ 
+        <ImageView
+            android:id="@+id/busColor"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/icon_bus_dark"/>
+ 
+    </LinearLayout>
+ 
+    <!-- Title Of Song-->
+    <TextView
+        android:id="@+id/busName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Rihanna Love the way lie"
         android:textColor="#040404"
-        custom:setFont="HelveticaNarrow"
-        android:textSize="12sp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp" 
+        android:typeface="sans"
+        android:textSize="13dip"
         
         android:textStyle="bold"/>
-    
-    <LinearLayout  android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-      <com.olimpotec.busaoapp.custom.CustomTextView
+ 
+    <!-- Artist Name -->
+    <TextView
+        android:id="@+id/company"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/busName"
+        android:textColor="#343434"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Just gona stand there and ..." />
+ 
+    <!-- Rightend Duration -->
+    <TextView
         android:id="@+id/busNumber"
-         android:textSize="32sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="14dp"
-        custom:setFont="HelveticaExComp"
-        android:text="080"
-        android:layout_centerVertical="true" />
-  </LinearLayout>
+        android:layout_below="@id/company"
+		android:layout_toRightOf="@+id/thumbnail"
+        android:text="000"
+        android:layout_marginRight="5dip"
+        android:textSize="20sp"
+        android:textColor="#000"
+        android:textStyle="bold"/>
 </RelativeLayout>
-

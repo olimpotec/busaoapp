@@ -3,16 +3,15 @@ package com.olimpotec.busaoapp.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.olimpotec.busaoapp.R;
-import com.olimpotec.busaoapp.helper.LogHelper;
 import com.olimpotec.busaoapp.model.entity.Bus;
 
 public class BusListAdapter extends ArrayAdapter<Bus> {
@@ -29,24 +28,30 @@ public class BusListAdapter extends ArrayAdapter<Bus> {
 	}
 	@Override
 	public View getView ( int position, View convertView, ViewGroup parent ) { 
-		LogHelper.debug(this, "getView");
+		
 		convertView = ( RelativeLayout ) inflater.inflate( resource, null ); 
 		
 		Bus bus = getItem( position );
-		LogHelper.debug(this, bus.getBusName());
-				TextView legendName = (TextView) convertView.findViewById(R.id.legendName);
-		legendName.setText(bus.getBusName());
-
+		
+		TextView busName = (TextView) convertView.findViewById(R.id.busName);
+		busName.setText(bus.getBusName());
+		
+		TextView company = (TextView) convertView.findViewById(R.id.company);
+		company.setText(bus.getCompany());
 		
 		TextView busNumber = (TextView) convertView.findViewById(R.id.busNumber);
 		busNumber.setText(bus.getBusNumber());
 		
+		
+		ImageView busColor = (ImageView) convertView.findViewById(R.id.busColor);
+		
+		
 		if(bus.getColor().equalsIgnoreCase("Vermelho"))
-			busNumber.setTextColor(Color.rgb(255,0,0));
+			busColor.setImageResource(R.drawable.icon_bus_red);
 		else if(bus.getColor().equalsIgnoreCase("Azul"))
-			busNumber.setTextColor(Color.rgb(0,0,255));
+			busColor.setImageResource(R.drawable.icon_bus_blue);
 		else if(bus.getColor().equalsIgnoreCase("Amarelo"))
-			busNumber.setTextColor(Color.rgb(202,202,0));
+			busColor.setImageResource(R.drawable.icon_bus_yellow);
 		
 		return convertView;
 	}
