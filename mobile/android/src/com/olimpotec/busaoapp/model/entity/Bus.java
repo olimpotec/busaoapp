@@ -22,11 +22,11 @@ public class Bus
     @DatabaseField 
     private String company;
     
-    public Integer getBus_id() {
+    public Integer getBusId() {
 		return busId;
 	}
 
-	public void setBus_id(Integer bus_id) {
+	public void setBusId(Integer bus_id) {
 		this.busId = bus_id;
 	}
 

@@ -101,7 +101,7 @@ public class Database extends OrmLiteSqliteOpenHelper
     	try
     	{
     		String myPath = DB_PATH + DB_NAME;
-    		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+    		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.CREATE_IF_NECESSARY);
     		LogHelper.debug(this, "Database Exist!");
     	}
     	catch(SQLiteException e)
@@ -158,7 +158,7 @@ public class Database extends OrmLiteSqliteOpenHelper
     	LogHelper.debug(this, "Openning Database on !" + DB_PATH + DB_NAME );
     	//Open the database
         String myPath = DB_PATH + DB_NAME;
-    	db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+    	db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.CREATE_IF_NECESSARY);
     	
     }
     

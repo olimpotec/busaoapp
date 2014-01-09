@@ -10,7 +10,7 @@ import com.olimpotec.busaoapp.helper.Database;
 
 public abstract class GenericDao<E, ID>  
 { 
-	private Dao<E, ID> dao;
+	protected Dao<E, ID> dao;
 	
 	private Class<E> type;
 	

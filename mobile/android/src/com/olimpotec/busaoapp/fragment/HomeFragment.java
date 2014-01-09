@@ -4,14 +4,18 @@ import java.sql.SQLException;
 
 import android.app.ListFragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.olimpotec.busaoapp.BusActivity;
 import com.olimpotec.busaoapp.R;
 import com.olimpotec.busaoapp.adapter.BusListAdapter;
 import com.olimpotec.busaoapp.model.dao.BusDao;
+import com.olimpotec.busaoapp.model.entity.Bus;
 
 public class HomeFragment extends ListFragment {
 	
@@ -57,7 +61,25 @@ public class HomeFragment extends ListFragment {
 	
 	public void refresh ()
 	{
-		progress = ProgressDialog.show (getActivity (), "Aguarde..", "Um momento por favor...", true, false);
+		progress = ProgressDialog.show (getActivity (), "Aguarde...", "Um momento por favor...", true, false);
 		setListAdapter( new BusListAdapter(getActivity(), R.layout.home_bus_row_item, busDao.getByPage(0, 20)));
 	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) 
+	{
+		Bus bus = (Bus) this.getListAdapter().getItem(position);
+		
+		Intent i = new Intent (this.getActivity(), BusActivity.class);
+		Bundle extras = new Bundle ();
+		
+		extras.putInt(BusActivity.BUS_ID, bus.getBusId());
+		extras.putString(BusActivity.BUS_NAME, bus.getBusNumber() +" - "+ bus.getBusName());
+		i.putExtras(extras);
+		
+		startActivity (i);
+		
+		super.onListItemClick(l, v, position, id);
+	}
+	
 }

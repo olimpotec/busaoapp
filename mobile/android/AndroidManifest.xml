@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:label="@string/app_name" android:name="com.olimpotec.busaoapp.MainActivity" /> 
+        <activity android:label="@string/bus_itinerary" android:name="com.olimpotec.busaoapp.BusActivity" /> 
     </application>
 
 </manifest>
