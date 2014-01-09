@@ -14,7 +14,7 @@
 	<field type="Date" column="_create" label="Create | pt_BR: Criado em | es_ES: Número" length="2" required="true" />
 
 	<order id="_NAME_" invert="false" />
-	<icon action="view" image="view.gif" label="Show | pt_BR: Visualizar | es_ES: Mostrar" default="true" />
+	<icon action="itinerary" image="view.gif" label="Show | pt_BR: Visualizar Itinerário | es_ES: Mostrar" default="true" />
 	<icon action="edit" image="edit.gif" label="Edit | pt_BR: Editar | es_ES: Editar" />
 	<icon action="delete" image="delete.gif" label="Delete | pt_BR: Apagar | es_ES: Eliminar" />
 	

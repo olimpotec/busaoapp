@@ -2,7 +2,7 @@
 <action-mapping>
 	<action
 		name="list"
-		label="List Item | pt_BR: Listar Ônibus | es_ES: Lista de elementos"
+		label="List Item | pt_BR: Listar Logradouro | es_ES: Lista de elementos"
 		default="true"
 		description="">
 		<menu action="create" />
@@ -12,7 +12,7 @@
 	
 	<action
 		name="create"
-		label="Create Items | pt_BR: Inserir Ônibus | es_ES: Crear elementos de"
+		label="Create Items | pt_BR: Inserir Logradouro | es_ES: Crear elementos de"
 		description=""
 		index-to="view">
 		<menu function="save" />
@@ -21,7 +21,7 @@
 	
 	<action
 		name="edit"
-		label="Edit Items | pt_BR: Editar Ônibus | es_ES: Editar elementos"
+		label="Edit Items | pt_BR: Editar Logradouro | es_ES: Editar elementos"
 		description=""
 		index-to="view">
 		<menu function="save" />
@@ -30,7 +30,7 @@
 	
 	<action
 		name="delete"
-		label="Delete Items | pt_BR: Apagar Ônibus | es_ES: Eliminar elementos"
+		label="Delete Items | pt_BR: Apagar Logradouro | es_ES: Eliminar elementos"
 		description=""
 		index-to="view">
 		<menu function="delete" />
@@ -39,7 +39,7 @@
 		
 	<action
 		name="view"
-		label="Show Items | pt_BR: Visualizar Ônibus | es_ES: Mostrar elementos"
+		label="Show Items | pt_BR: Visualizar Logradouro | es_ES: Mostrar elementos"
 		description="">
 		<menu action="list" />
 		<menu function="print" />

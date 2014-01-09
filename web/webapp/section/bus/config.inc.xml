@@ -49,6 +49,17 @@
 	</action>
 	
 	<action
+		name="itinerary"
+		label="Show Itinerary | pt_BR: Visualizar Itinerário | es_ES: Mostrar elementos"
+		description="">
+		<menu action="list" />
+		<menu function="print" />
+		<menu action="edit" />
+		<menu action="delete" />
+		<menu function="pdf" />
+	</action>
+
+	<action
 		name="version"
 		label="Version Control | pt_BR: Controle de Versões | es_ES: El control de versiones">
 		<menu function="search" />

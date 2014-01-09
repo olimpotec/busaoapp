@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+   	android:layout_width="match_parent"
+    android:layout_height="48dp" android:paddingTop="15dp">
+ 
+    <!--  ListRow Left side Thumbnail image -->
+
+  
+    <com.olimpotec.busaoapp.custom.CustomTextView
+        android:id="@+id/legendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#040404"
+        custom:setFont="HelveticaNarrow"
+        android:textSize="12sp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp" 
+        
+        android:textStyle="bold"/>
+    
+    <LinearLayout  android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+      <com.olimpotec.busaoapp.custom.CustomTextView
+        android:id="@+id/busNumber"
+         android:textSize="32sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="14dp"
+        custom:setFont="HelveticaExComp"
+        android:text="080"
+        android:layout_centerVertical="true" />
+  </LinearLayout>
+</RelativeLayout>
+

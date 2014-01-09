@@ -16,6 +16,12 @@
 	<section 
 		label="Bus | pt_BR: Linhas de ônibus"
 		name="bus"
+		component="local/component/bus.generic/"
+	/>
+
+	<section 
+		label="Bus | pt_BR: Logradouro"
+		name="street"
 		component="global.generic"
 	/>
 	

@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ ini_set("display_errors", 1);
+
 $file = 'configure/titan.xml';
 
 if (!file_exists ($file))

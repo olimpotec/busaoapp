@@ -156,7 +156,7 @@ class AsseturCrawler extends AbstractCrawler
 			$this->setURL($this->_base . str_pad($i, 3, "0", STR_PAD_LEFT).'.html');
 			// Thats enough, now here we go
 			$this->go();
-			echo $this->_base . str_pad($i, 3, "0", STR_PAD_LEFT).'.html'.$lb;
+			//echo $this->_base . str_pad($i, 3, "0", STR_PAD_LEFT).'.html'.$lb;
 			// At the end, after the process is finished, we print a short
 			// report (see method getProcessReport() for more information)
 			$report = $this->getProcessReport();
@@ -210,7 +210,7 @@ class AsseturCrawler extends AbstractCrawler
 
 		if($dom->find('td.tittab_maior',0))
 		{
-			echo $dom->find('td.tittab_maior',0)->plaintext.$lb;
+			//echo $dom->find('td.tittab_maior',0)->plaintext.$lb;
 
 			if(preg_match('/azul/', $dom->find('td.tittab_maior',0)->firstChild()->getAttribute('src')))
 				$color = 'AZUL' ;
@@ -323,6 +323,8 @@ class AsseturCrawler extends AbstractCrawler
 								);
 
 				$markers = array();
+				
+				$this->db->exec("DELETE FROM cms.itineraries WHERE bus_id = ".$itinerary['bus_id']." AND functional_plan_id = ". $functionalPlanId);
 
 				foreach ($table2->find('tr') as $keyTr => $trs) 
 				{
@@ -334,7 +336,7 @@ class AsseturCrawler extends AbstractCrawler
 					}
 						
 
-					$this->db->exec("DELETE FROM cms.itineraries WHERE bus_id = ".$itinerary['bus_id']." AND functional_plan_id = ". $functionalPlanId);
+					
 
 					$arrayTds = $trs->find('td');
 
@@ -353,6 +355,8 @@ class AsseturCrawler extends AbstractCrawler
 						if(count($trs->find('td')) == $keyTd + 1) continue;
 
 						$itinerary['schedule'] = substr(str_replace(':', '', $content), 0, 2). ":".substr(str_replace(':', '', $content), 2, 2);
+
+						$itinerary ['order'] =  $keyTd;
 
 						$this->insertItinerary ($itinerary);
 						
@@ -476,7 +480,7 @@ class AsseturCrawler extends AbstractCrawler
 
 	private function insertItinerary ($itinerary)
 	{
-		$this->db->exec ("INSERT INTO cms.itineraries (bus_id, line, marker_id, schedule, functional_plan_id) VALUES (".$itinerary['bus_id'].", '".$itinerary['line']."', ".$itinerary['marker_id'].", '".$itinerary['schedule']."', ".$itinerary['functional_plan_id'].")");
+		$this->db->exec ("INSERT INTO cms.itineraries (bus_id, line, marker_id, schedule, functional_plan_id, _order) VALUES (".$itinerary['bus_id'].", '".$itinerary['line']."', ".$itinerary['marker_id'].", '".$itinerary['schedule']."', ".$itinerary['functional_plan_id'].", ".$itinerary['order'].")");
 	}
 
 	private function generateUrl($input)

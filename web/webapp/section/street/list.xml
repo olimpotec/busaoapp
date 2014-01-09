@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<view table="cms.bus" primary="bus_id" paginate="15">
-	<field type="String" column="bus_name" label="Name | pt_BR: Nome | es_ES: Nombre" max-length="128" id="_NAME_" required="true" />
-	<field type="Integer" column="bus_number" label="Number | pt_BR: Número | es_ES: Número" required="true" />
+<view table="cms.streets" primary="street_id" paginate="15">
+	<field type="String" column="street_name" label="Name | pt_BR: Nome | es_ES: Nombre" max-length="128" required="true" />
 
-	<field type="Enum" column="color" label="Cor">
-		<item value="AZUL" label="Azul" />
-		<item value="VERMELHO" label="Vermelho" />
-		<item value="AMARELO" label="Amarelo" />
-		<item value="" label="Não Informado" />
-	</field>
-	<field type="String" column="company" label="Company | pt_BR: Empresa" max-length="256" />
 	<field type="Date" column="_update" label="Update | pt_BR: Atualizado em | es_ES: Número" length="2" required="true" />
 	<field type="Date" column="_create" label="Create | pt_BR: Criado em | es_ES: Número" length="2" required="true" />
 
-	<order id="_NAME_" invert="false" />
+	
 	<icon action="view" image="view.gif" label="Show | pt_BR: Visualizar | es_ES: Mostrar" default="true" />
 	<icon action="edit" image="edit.gif" label="Edit | pt_BR: Editar | es_ES: Editar" />
 	<icon action="delete" image="delete.gif" label="Delete | pt_BR: Apagar | es_ES: Eliminar" />
 	
 </view>
-<search table="cms.bus">
-	<field type="String" column="bus_name" label="Name | pt_BR: Nome | es_ES: Nombre" max-length="128" id="_NAME_" required="true" />
-	<field type="Integer" column="bus_number" label="Number | pt_BR: Número | es_ES: Número" length="2" required="true" />
-	<field type="Enum" column="color" label="Cor">
-		<item value="AZUL" label="Azul" />
-		<item value="VERMELHO" label="Vermelho" />
-		<item value="AMARELO" label="Amarelo" />
-		<item value="" label="Não Informado" />
-	</field>
-	<field type="String" column="company" label="Company | pt_BR: Empresa" max-length="256" />
+<search table="cms.streets">
+	<field type="String" column="street_name" label="Name | pt_BR: Nome | es_ES: Nombre" max-length="128" required="true" />
 </search>
