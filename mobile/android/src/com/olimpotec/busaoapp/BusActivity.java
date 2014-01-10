@@ -38,8 +38,9 @@ public class BusActivity extends FragmentActivity implements ActionBar.TabListen
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
  
-        // Adding Tabs
-        for (String tab_name : tabs) {
+     
+        for (String tab_name : tabs) 
+        {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
                     .setTabListener(this));
         }

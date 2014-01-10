@@ -1,7 +1,9 @@
 package com.olimpotec.busaoapp.fragment;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,7 +23,7 @@ public class HomeFragment extends ListFragment {
 	
 	private BusDao busDao;
 	private ProgressDialog progress;
-	
+	private String query;
 	public HomeFragment()
 	{
 		try {
@@ -62,7 +64,26 @@ public class HomeFragment extends ListFragment {
 	public void refresh ()
 	{
 		progress = ProgressDialog.show (getActivity (), "Aguarde...", "Um momento por favor...", true, false);
-		setListAdapter( new BusListAdapter(getActivity(), R.layout.home_bus_row_item, busDao.getByPage(0, 20)));
+		
+		List<Bus> bus;
+		
+		if(query == null)
+			bus =  busDao.getByPage(0, 20);
+		else
+			bus = busDao.getAllByQuery(query, 0, 20);
+		
+		if(bus == null || bus.size() == 0)
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+			builder.setMessage(R.string.bus_notfound_msg)
+			       .setTitle(R.string.bus_notfound_title).setPositiveButton("OK", null);
+
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
+		else
+			setListAdapter( new BusListAdapter(getActivity(), R.layout.home_bus_row_item, bus));
 	}
 
 	@Override
@@ -82,4 +103,8 @@ public class HomeFragment extends ListFragment {
 		super.onListItemClick(l, v, position, id);
 	}
 	
+	public void setQuery (String query)
+	{
+		this.query = query;
+	}
 }

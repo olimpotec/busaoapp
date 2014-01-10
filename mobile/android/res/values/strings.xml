@@ -19,6 +19,10 @@
        	<item>@drawable/ic_home</item>
     </array>
    
-    <string name="action_websearch">Web search</string>
+    <string name="action_websearch">Busca</string>
+    <string name="search_hint">Busca</string>
     <string name="bus_itinerary">Itinerário</string>
+    <string name="bus_notfound_title">Não Encontrado</string>
+    <string name="bus_notfound_msg">Não encontramos nenhuma linha de ônibus de acordo com os critérios de busca.</string>
+    
 </resources>

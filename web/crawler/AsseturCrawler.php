@@ -197,7 +197,7 @@ class AsseturCrawler extends AbstractCrawler
 
 		$dom = str_get_html($html);
 		$line = 'A';
-		$sentido = 1;
+		$sentido = 0;
 		$company = '';
 		$color = 'N/A';
 		$functionalPlanId = 0;
@@ -276,14 +276,15 @@ class AsseturCrawler extends AbstractCrawler
 			if( !$table->find('tr td.tittab_maior') && !$table->find('table tr td.fontstatususuazul') && preg_match('/Sentido:/', $table->plaintext) )
 			{
 				
+				if($sentido++ && $sentido % 2)
+					$line++;
 
 				$route ['line_id'] = $line;
 
-				$this->db->exec ("DELETE FROM cms.routes WHERE  bus_id = ".$route['bus_id']." AND line ilike '".$route['line_id']."'");
+				//$this->db->exec ("DELETE FROM cms.routes WHERE  bus_id = ".$route['bus_id']." AND line ilike '".$route['line_id']."'");
 
 					
-				if($sentido++ % 2)
-					$line++;
+				echo $route ['line_id'];
 
 				foreach ($table->find('td') as $key => $value) 
 				{
