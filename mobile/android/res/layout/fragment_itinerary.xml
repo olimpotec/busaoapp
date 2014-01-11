@@ -5,9 +5,20 @@
     android:orientation="vertical"
     android:background="#f4f4f4" >
  
+     <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        style="@style/GenericProgressBackground" >
+
+        <ProgressBar style="@style/GenericProgressIndicator" android:id="@+id/bar" />
+        
+    </RelativeLayout>
+    
             <ExpandableListView
                 android:id="@+id/lvExp"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"/>   
  
+ 	
 </LinearLayout>

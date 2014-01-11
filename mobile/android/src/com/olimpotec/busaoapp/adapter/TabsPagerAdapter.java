@@ -21,18 +21,23 @@ public class TabsPagerAdapter extends FragmentPagerAdapter
     }
  
     @Override
-    public Fragment getItem(int index) {
- 
+    public Fragment getItem(int index) 
+    {
+    	LogHelper.debug(this, "Tab: "+index);
         switch (index) 
         {
 	        case 0:
 	        	ItineraryFragment it = new ItineraryFragment();
-	        	LogHelper.debug(this, ""+act.getIntent().getExtras().getInt(BusActivity.BUS_ID));
+	        	
 	        	it.setBusId(act.getIntent().getExtras().getInt(BusActivity.BUS_ID));
 	            return it ;
 	        case 1:
-	            // Games fragment activity
-	            return new ScheduleFragment();
+	        case 2:
+	        	ScheduleFragment schedule = new ScheduleFragment();
+	        	LogHelper.debug(this, ""+act.getIntent().getExtras().getInt(BusActivity.BUS_ID));
+	        	schedule.setBusId(act.getIntent().getExtras().getInt(BusActivity.BUS_ID));
+	            return schedule ;
+	            
         }
  
         return null;

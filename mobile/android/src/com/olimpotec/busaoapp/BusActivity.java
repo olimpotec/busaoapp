@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import com.olimpotec.busaoapp.adapter.TabsPagerAdapter;
+import com.olimpotec.busaoapp.helper.LogHelper;
 
 public class BusActivity extends FragmentActivity implements ActionBar.TabListener
 {
@@ -44,23 +45,45 @@ public class BusActivity extends FragmentActivity implements ActionBar.TabListen
             actionBar.addTab(actionBar.newTab().setText(tab_name)
                     .setTabListener(this));
         }
+        
+        /**
+         * on swiping the viewpager make respective tab selected
+         * */
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+ 
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
+ 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+ 
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
 	}
 
 	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
+	public void onTabReselected(Tab tab, FragmentTransaction ft) 
+	{
 		
 	}
 
 	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
+	public void onTabSelected(Tab tab, FragmentTransaction ft) 
+	{
+		LogHelper.debug(this,""+ tab.getPosition());
+		viewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) 
+	{
 		
 	}
 }

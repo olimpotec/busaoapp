@@ -37,7 +37,9 @@ public class HomeFragment extends ListFragment {
 	@Override
 	public void onCreate (Bundle bundle)
 	{
+		
 		super.onCreate(bundle);
+		
 		
 		refresh();
 	}
@@ -45,7 +47,9 @@ public class HomeFragment extends ListFragment {
 	@Override
 	public void onActivityCreated (Bundle bundle)
 	{
+		
 		super.onActivityCreated (bundle);
+		
 	}
 	
 	@Override
@@ -57,13 +61,13 @@ public class HomeFragment extends ListFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) 
 	{
-		progress.dismiss();
+		
 		super.onViewCreated(view, savedInstanceState);
 	}
 	
 	public void refresh ()
 	{
-		progress = ProgressDialog.show (getActivity (), "Aguarde...", "Um momento por favor...", true, false);
+		
 		
 		List<Bus> bus;
 		

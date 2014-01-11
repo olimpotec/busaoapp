@@ -176,10 +176,10 @@ public class MainActivity extends Activity {
 		
 		switch (position) 
 		{
-		case 0:
-			fragment = new HomeFragment();
-			((HomeFragment) fragment).setQuery (query);
-			break;
+			case 0:
+				fragment = new HomeFragment();
+				((HomeFragment) fragment).setQuery (query);
+				break;
 		
 
 			default:
