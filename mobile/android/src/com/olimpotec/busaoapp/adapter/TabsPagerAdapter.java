@@ -32,7 +32,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter
 	        	it.setBusId(act.getIntent().getExtras().getInt(BusActivity.BUS_ID));
 	            return it ;
 	        case 1:
-	        case 2:
 	        	ScheduleFragment schedule = new ScheduleFragment();
 	        	LogHelper.debug(this, ""+act.getIntent().getExtras().getInt(BusActivity.BUS_ID));
 	        	schedule.setBusId(act.getIntent().getExtras().getInt(BusActivity.BUS_ID));
@@ -42,11 +41,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter
  
         return null;
     }
- 
-    @Override
-    public int getCount() {
-        // get item count - equal to number of tabs
-        return 3;
-    }
- 
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return 2;
+	}
 }

@@ -62,4 +62,11 @@ public class Bus
 		this.company = company;
 	}
 
+	@Override
+	public String toString() {
+		return "Bus [busId=" + busId + ", busName=" + busName + ", busNumber="
+				+ busNumber + ", color=" + color + ", company=" + company + "]";
+	}
+	
+
 }

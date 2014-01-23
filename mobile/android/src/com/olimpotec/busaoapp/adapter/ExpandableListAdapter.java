@@ -11,13 +11,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.olimpotec.busaoapp.R;
+import com.olimpotec.busaoapp.custom.CustomTextView;
  
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
  
-    private Context _context;
-    private List<String> _listDataHeader; // header titles
+    protected Context _context;
+    protected List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    protected HashMap<String, List<String>> _listDataChild;
  
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
             HashMap<String, List<String>> listChildData) {
@@ -49,7 +50,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.itinerary_list_item, null);
         }
  
-        TextView txtListChild = (TextView) convertView
+        CustomTextView txtListChild = (CustomTextView) convertView
                 .findViewById(R.id.lblListItem);
  
         txtListChild.setText(childText);

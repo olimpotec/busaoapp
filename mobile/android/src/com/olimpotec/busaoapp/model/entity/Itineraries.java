@@ -22,7 +22,9 @@ public class Itineraries {
 	
 	@DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "functional_plan_id")
 	private FunctionalPlan functionalPlan;
-
+	
+	@DatabaseField(columnName = "_order")
+	private int order;
 	
 	public FunctionalPlan getFunctionalPlan() {
 		return functionalPlan;
@@ -70,6 +72,21 @@ public class Itineraries {
 
 	public void setBus(Bus bus) {
 		this.bus = bus;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
+	@Override
+	public String toString() {
+		return "Itineraries [itineraryId=" + itineraryId + ", line=" + line
+				+ ", schedule=" + schedule + ", marker=" + marker + ", bus="
+				+ bus + ", functionalPlan=" + functionalPlan + "]";
 	}
 
 }

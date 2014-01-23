@@ -7,10 +7,11 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.olimpotec.busaoapp.R;
+import com.olimpotec.busaoapp.helper.LogHelper;
 
 public class CustomTextView extends TextView
 {
-	private String font = "HelveticaNeue";
+	private String font = "HelveticaExComp";
 	
     public CustomTextView(Context context)
     {
@@ -24,7 +25,12 @@ public class CustomTextView extends TextView
         super(context, attrs);
         
         TypedArray a = this.getContext().obtainStyledAttributes(attrs, R.styleable.CustomTextView);
-		font = a.getString(R.styleable.CustomTextView_setFont);
+        
+        String fontInfo = a.getString(R.styleable.CustomTextView_setFont);
+        
+		if(fontInfo != null) 
+			font = fontInfo;
+		
 		a.recycle();
 		
         init();
@@ -35,14 +41,19 @@ public class CustomTextView extends TextView
 		super(context, attrs, defStyle);
 		
 		TypedArray a = this.getContext().obtainStyledAttributes(attrs, R.styleable.CustomTextView, defStyle, 0);
-		font = a.getString(R.styleable.CustomTextView_setFont);
+		String fontInfo = a.getString(R.styleable.CustomTextView_setFont);
+		
+		
+		if(fontInfo != null) 
+			font = fontInfo;
+		
 		a.recycle();
 		
 		init();
     }
 
     public void init()
-    {
+    {	
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/"+font+".ttf");
         
         setTypeface(tf);

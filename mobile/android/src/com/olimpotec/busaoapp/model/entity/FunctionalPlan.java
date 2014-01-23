@@ -27,5 +27,11 @@ public class FunctionalPlan
 	public void setFunctionalPlanName(String functionalPlanName) {
 		this.functionalPlanName = functionalPlanName;
 	}
+
+	@Override
+	public String toString() {
+		return "FunctionalPlan [functionalPlanId=" + functionalPlanId
+				+ ", functionalPlanName=" + functionalPlanName + "]";
+	}
 	
 }

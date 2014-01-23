@@ -3,11 +3,13 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_notify"
         android:title="@string/action_settings"/>
 
     <item android:id="@+id/action_search"
           android:icon="@drawable/action_search"
           android:title="@string/action_websearch"
-          android:showAsAction="ifRoom|withText" android:actionViewClass="android.widget.SearchView" />
+          android:showAsAction="ifRoom|withText" 
+          android:actionViewClass="android.widget.SearchView" />
 </menu>

@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import com.olimpotec.busaoapp.adapter.TabsPagerAdapter;
-import com.olimpotec.busaoapp.helper.LogHelper;
 
 public class BusActivity extends FragmentActivity implements ActionBar.TabListener
 {
@@ -16,21 +15,22 @@ public class BusActivity extends FragmentActivity implements ActionBar.TabListen
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
 	
-    private String[] tabs = { "Itiner‡rios", "Hor‡rios", "Pontos de Interesse" };
+    private String[] tabs = { "Itiner‡rios", "Hor‡rios" };
     
 	public static String BUS_ID = "bus_id";
 	public static String BUS_NAME = "bus_name";
 	
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bus);
 		
 		this.setTitle((CharSequence) this.getIntent().getExtras().getString(BUS_NAME));
 		
-		// Initilization
+		
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), this);
@@ -46,24 +46,24 @@ public class BusActivity extends FragmentActivity implements ActionBar.TabListen
                     .setTabListener(this));
         }
         
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+       
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() 
+        {
  
             @Override
-            public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
+            public void onPageSelected(int position) 
+            {
                 actionBar.setSelectedNavigationItem(position);
             }
  
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            public void onPageScrolled(int arg0, float arg1, int arg2) 
+            {
             }
  
             @Override
-            public void onPageScrollStateChanged(int arg0) {
+            public void onPageScrollStateChanged(int arg0) 
+            {
             }
         });
 	}
@@ -77,7 +77,6 @@ public class BusActivity extends FragmentActivity implements ActionBar.TabListen
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) 
 	{
-		LogHelper.debug(this,""+ tab.getPosition());
 		viewPager.setCurrentItem(tab.getPosition());
 	}
 

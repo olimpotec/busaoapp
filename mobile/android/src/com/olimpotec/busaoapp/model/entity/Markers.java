@@ -31,5 +31,11 @@ public class Markers
 	public void setMarkerName(String markerName) 
 	{
 		this.markerName = markerName;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "Markers [markerId=" + markerId + ", markerName=" + markerName
+				+ "]";
+	}
 }

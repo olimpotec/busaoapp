@@ -49,4 +49,11 @@ public class Routes
 	public void setLine(String line) {
 		this.line = line;
 	}
+
+	@Override
+	public String toString() {
+		return "Routes [street=" + street + ", bus=" + bus + ", routeWay="
+				+ routeWay + ", line=" + line + "]";
+	}
+	
 }
